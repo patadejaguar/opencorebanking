@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+ <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+   <mime-type type="application/x-jdlstudio">  
+   <comment>JHipster JDL Studio</comment>
+   <comment xml:lang="es">JHipster JDL Studio</comment>
+	<glob pattern="*.jh"/>
+  </mime-type>
+ </mime-info>

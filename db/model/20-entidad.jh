@@ -1,0 +1,137 @@
+/**
+* Reglas generales.
+* Maximo en nombres de catalogos 80
+* Maximo en tipos desconocidos 80
+* Maximo en mails 80
+* Boleanos como enteros 0/1
+* Maximo en alias de catalogo 30
+*/
+
+entity Entidad {
+	nombre String maxlength(80),
+    alias String maxlength(30),
+
+	personasId Long max(999999999) /*** relacion persona-entidad */
+}
+
+entity EntidadConfiguracion {
+
+	entidadId Integer,
+
+	nombre String maxlength(80),
+	tipo String maxlength(15), /*INT,CHAR,REAL*/
+	valor String maxlength(100),
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+entity EntidadReglas {
+
+	entidadId Integer,
+
+	nombre String maxlength(80),
+	valor String maxlength(100) /**Valor*/,
+	contexto String maxlength(30) /**Contexto */,
+	eventos String maxlength(80) /**Eventos*/,
+	metadatos String maxlength(100) /**Metadata*/,
+	sujetos String maxlength(100) /**Sujetos*/,
+	valorSimple Integer max(9) /**Booleano*/,
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+/**
+* Catalogo de Sucursales
+*/
+entity EntidadSucursal {
+	entidadId Integer,
+	nombre String maxlength(20),
+	alias String maxlength(30),
+	numero Integer max(999),
+    personasId Long max(999999999),
+	domiciliosId Integer,
+	contableCentroCostoId Integer,
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+entity EntidadSucursalParametros {
+	entidadSucursalId Integer,
+	nombre String maxlength(80),
+	valor String maxlength(100) /** Valor */,
+	contexto String maxlength(30) /** Contexto */,
+	eventos String maxlength(80) /** Eventos */,
+	metadatos String maxlength(100) /** Metadata */,
+	sujetos String maxlength(100) /** Sujetos */,
+	valorSimple Integer max(9) /** Booleano */,
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+entity EntidadSucursalRoles {
+	entidadId Integer,
+	
+    entidadSucursalId Integer,
+	usuariosId Integer,
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+entity EntidadUsuarios {
+	entidadId Integer,
+	personasId Long max(999999999),
+	
+	nombre String maxlength(80),
+	password String maxlength(80),
+	mail String maxlength(80),
+	pin String maxlength(10),
+	alias String maxlength(30),
+	/** Es corporativo */
+	corporativo Integer max(9),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+/**
+* 
+*/
+entity EntidadMensajeria {
+	entidadId Integer,
+	mensajeriaTipoId Integer,
+	mensajeriaCanalId Integer,
+	mensajeriaText String maxlength(200),
+	enviado Integer max(9),
+	leido Integer max(9),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+/**
+ * Many to one relationship.
+ */
+relationship OneToMany {
+	Entidad to EntidadConfiguracion{entidadId},
+	Entidad to EntidadUsuarios{entidadId},
+	Entidad to EntidadSucursalRoles{entidadId},
+	Entidad to EntidadSucursal{entidadId},
+	Entidad to EntidadReglas{entidadId},
+	EntidadSucursal to EntidadSucursalRoles{sucursalId},
+	EntidadUsuarios to EntidadSucursalRoles{usuariosId}
+}
+
+
+
+/** 
+ * Set pagination options.
+ */
+paginate *  with pagination
+
+dto * with mapstruct
+/**
+ * Set service options to all except few.
+ */
+service all with serviceClass
+/** 
+ * Set an angular suffix.
+ */
+angularSuffix * with safeosms
+
+
+//filter all

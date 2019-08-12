@@ -1,0 +1,45 @@
+
+entity Recibos {
+
+}
+entity RecibosTipos {
+	nombreRecibosTipos String maxlength(80),
+	aliasRecibosTipos String maxlength(20)
+}
+entity Operaciones {
+
+	recibosId Long
+
+}
+entity OperacionesTipos {
+	nombreOperacionesTipos String maxlength(80),
+	aliasOperacionesTipos String maxlength(20)
+}
+/** 
+ * Set pagination options.
+ */
+paginate *  with pagination
+
+dto * with mapstruct
+/**
+ * Set service options to all except few.
+ */
+service all with serviceClass
+/** 
+ * Set an angular suffix.
+ */
+angularSuffix * with safeosms
+
+//filter all
+
+// Maping
+//dto all with mapstruct
+//service all with serviceImpl
+// Service with class
+//service all with serviceClass
+// Filtering
+// filter all
+
+// Paginate
+//paginate all with pagination
+//skipClient all

@@ -1,0 +1,46 @@
+entity RiesgosTipos {
+	nombre String maxlength(80),
+    alias String maxlength(30)
+}
+
+entity NivelesTipos {
+	nombre String maxlength(80),
+    alias String maxlength(30)
+}
+
+entity RiesgosTipos {
+	nombre String maxlength(80),
+    alias String maxlength(30)
+}
+entity RiesgosFrecuenciaChequeo {
+	nombre String maxlength(80),
+    alias String maxlength(30)
+}
+entity RiesgosImpacto {
+	nombre String maxlength(80),
+    alias String maxlength(30)
+}
+entity RiesgosProbabilidad {
+	nombre String maxlength(80),
+    alias String maxlength(30)
+}
+entity RiesgosFrecuenciaReporte {
+	nombre String maxlength(80),
+    alias String maxlength(30)
+}
+/** 
+ * Set pagination options.
+ */
+paginate *  with pagination
+
+dto * with mapstruct
+/**
+ * Set service options to all except few.
+ */
+service all with serviceClass
+/** 
+ * Set an angular suffix.
+ */
+angularSuffix * with safeosms
+
+//filter all

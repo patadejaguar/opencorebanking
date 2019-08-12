@@ -1,0 +1,503 @@
+//#title: safe-osms-database-personas
+/**
+* Reglas generales.
+* Maximo en nombres de catalogos 80
+* Maximo en tipos desconocidos 80
+* Maximo en mails 80
+* Boleanos como enteros 0/1
+* Maximo en alias de catalogo 30
+*/
+
+entity PersonasEstatus {
+	nombre String maxlength(80),
+    alias String maxlength(80),
+    estatus Integer max(9)
+}
+
+entity Personas {
+
+	idInterno String maxlength(20),
+    primerNombre String maxlength(100),
+	segundoNombre String  maxlength(80),
+    primerApellido String  maxlength(80),
+    segundoApellido String maxlength(80),
+    nombreCompilado String maxlength(100),
+    legalId String maxlength(25),
+	fiscalId String maxlength(25),
+    poblacionalId String maxlength(25),
+
+    correoPrincipal String maxlength(80),
+    telefonoPrincipal String maxlength(20),
+    /**
+    * Nombre del Pais en donde existe o nace
+	* Codigo ISO
+    */
+    paisExistencia String maxlength(4),
+    fechaExistencia LocalDate, /** Fecha de Nacimiento  o Creacion */
+    lugarExistencia String maxlength(80),
+    origenRegistro Integer max(999),
+
+	personasTipo1Id Integer max(999),
+	personasTipo2Id Integer max(999),
+    personasTipo3Id Integer max(999),
+
+	origenTiposId Integer max(999),
+	nombreAlias String maxlength(60),
+	
+	personasEstatusId Integer max(999), /*Estatus como persona*/
+    
+    entidadId Integer,
+    sucursalId Integer,
+    estatus Integer max(9) , 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999),
+    domicilioId Integer max(99999999),
+	fechaRegistro LocalDate, /** Fecha de Registro Historico */
+	fechaAutorizacion LocalDate /** Fecha de Autorizacion en el Sistema */
+}
+entity PersonasRiesgoIndicadores {
+		personasId Long max(999999999),
+		tipoRiesgoId Integer
+
+}
+entity PersonasBajaHistorico {
+	personasId Long max(999999999),
+	personasBajaRazonesId Integer,
+    entidadId Integer,
+    estatus Integer max(9), 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999)
+}
+entity PersonasBajaRazones {
+	nombre String maxlength(80),
+	personasBajaRazonesId Integer
+}
+entity PersonasMoralesDe {
+	personasId Long max(999999999),
+
+	nombre String maxlength(80),
+
+    tipoDeDocumentoId Integer max(999) /** Tipo de Documentos */,
+ 
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasComunicacion {
+	personasId Long max(999999999),
+
+	nombre String maxlength(80),
+
+	tipoDeCanalId String maxlength(10) /** SistemaCanales */,
+   	valorComunicacion String maxlength(30), /** Valor del telefono */
+
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuarioReg Integer max(9999)
+}
+entity PersonasEmpleadores {
+	personasId Long max(999999999),
+
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasProveedores {
+	personasId Long max(999999999),
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasAseguradores {
+	personasId Long max(999999999),
+    estatus Integer max(9) , 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999)
+
+}
+
+entity PersonasNacionalidades {
+	
+    personasId Long max(999999999),
+    paisesId Integer,
+    
+    
+    estatus Integer max(9) , 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999)
+
+}
+relationship OneToMany {
+
+    Personas to PersonasRelaciones{personasId},
+    Personas to PersonasRelaciones{personasId2},
+
+	Personas to PersonasContratos{personasId},
+	Personas to PersonasProveedores{personasId},
+	Personas to PersonasAseguradores{personasId},
+	Personas to PersonasEmpleadores{personasId},
+	Personas to PersonasDocumentos{personasId},
+	Personas to PersonasDomicilios{personasId},
+	Personas to PersonasMoralesDe{personasId}
+}
+entity PersonasDocumentos {
+	personasId Long max(999999999),
+    
+	nombre String maxlength(80),
+
+    documentosTipoId Integer,
+    
+    
+    estatus Integer max(9) , 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999)
+
+
+}
+/**
+* Tipos de Documentos
+*/
+entity PersonasDoctosTipos {
+	
+	nombre String maxlength(80),
+    alias String maxlength(80),
+    estatus Integer max(9)
+}
+entity PersonasDomicilios {
+	personasId Long max(999999999),
+	domiciliosId Integer,
+    estatus Integer max(9) , 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999)
+}
+/**
+* Tipos de Patrimonio
+*/
+entity PersonasPatrimonioTipos {
+	nombre String maxlength(80),
+    alias String maxlength(80),
+    estatus Integer max(9)
+}
+entity PersonasPatrimonio {
+	personasId Long max(999999999),
+	personasPatrimonioTiposId Integer max(9999)
+
+}
+
+
+entity PersonasActividades {
+	personasId Long max(999999999),
+
+	nombre String maxlength(80),
+
+	personasActividadesTiposId Integer,
+    personasActividadesScianId Integer,
+    actividadesPldId Integer,
+    domiciliosId Integer,
+
+    estatus Integer max(9) , 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999)
+
+}
+entity PersonasActividadesTipos {
+	nombre String maxlength(80),
+
+    estatus Integer max(9) , 
+    tiempo Long max(999999999),
+    usuariosId Integer max(9999)
+
+}
+
+entity PersonasActividadesScian {
+	nombre String maxlength(80),
+
+	actividadesScianIdLegal String maxlength(15),
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasActividadesPld {
+	nombre String maxlength(80),
+
+	actividadesPldIdLegal String maxlength(15),
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+
+entity PersonasRelaciones {
+	
+    personasId Long max(999999999),
+    personasId2 Long max(999999999),
+    relacionesTiposId Integer,
+    parentescoTiposId Integer,
+    
+    esDependiente Integer max(9),
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasRelacionesTipos {
+	
+	nombre String maxlength(80),
+
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasParentescoTipos {
+	
+	nombre String maxlength(80),
+
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasOrigenTipos {
+	
+	nombre String maxlength(80),
+
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+
+entity PersonasRelacionesTipos {
+	
+	nombre String maxlength(80),
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+}
+
+entity PersonasTipo1 {
+	
+	nombre String maxlength(80),
+    alias String maxlength(30),
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+
+entity PersonasTipo2 {
+	
+	nombre String maxlength(80),
+    alias String maxlength(30),
+    
+    
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity PersonasTipo3 {
+	
+	nombre String maxlength(80),
+    alias String maxlength(30),
+    
+    
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+
+
+
+entity  Domicilios {
+	tipoRegimenId Integer,
+    tipoViviendaId Integer,
+	paisesId Integer,
+	
+    nombreAcceso String maxlength(150),
+    numeroExterior String maxlength(30),
+    numeroInterior String maxlength(30),
+    nombreColonia String maxlength(100),
+    nombreEntidadPob String maxlength(80),
+    nombreMunicipio String maxlength(80),
+    referencia1Dom String maxlength(80),
+    referencia2Dom String maxlength(80),
+    codigoPostal Integer max(999999),
+    claveMunicipio Integer max(9999),
+    claveEntidadPob Integer max(999),
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+}
+
+entity DomiciliosPaises {
+	domiciliosPaisesNom String maxlength(100),
+    gentilicio String maxlength(80),
+    claveNumerica Integer max(99),
+    claveAlpha String maxlength(4),
+    nivelRiesgo Integer max(999),
+    esParaisoFiscal Integer max(9),
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+
+entity DomiciliosTipoRegimen {
+	
+	nombre String maxlength(80),
+
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+entity DomiciliosTipoVivienda {
+	
+	nombre String maxlength(80),
+    
+    
+    /** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+
+}
+
+
+/**
+* Contratos por personas
+*/
+entity PersonasContratos {
+	personasId Long  max(999999999),
+	productosId Integer max (999),
+	productosTipoId Integer max (99) /**/,
+	tiempoInicial ZonedDateTime,
+    tiempoFinal ZonedDateTime,
+    internaID String maxlength(15),
+
+	contratoCuota Double,
+
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9) , 
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+    /** Usuario de Registro */
+    usuariosId Integer max(9999)
+}
+
+
+
+relationship OneToMany {
+
+	PersonasTipo1 to Personas{personasTipo1Id},
+    PersonasTipo2 to Personas{personasTipo2Id},
+	PersonasTipo3 to Personas{personasTipo3Id},
+	PersonasOrigenTipos to Personas{origenTiposId},
+	PersonasRelacionesTipos to PersonasRelaciones{relacionesTiposId},
+	PersonasParentescoTipos to PersonasRelaciones{parentescoTiposId},
+
+	
+
+	DomiciliosTipoRegimen to Domicilios{tipoRegimenId},
+	DomiciliosTipoVivienda to Domicilios{tipoViviendaId},
+	DomiciliosPaises to Domicilios{paisesId},
+	DomiciliosPaises to PersonasNacionalidades{paisesId},
+
+	Domicilios to PersonasActividades{domiciliosId},
+	Domicilios to PersonasDomicilios{domiciliosId},
+
+	PersonasActividadesTipos to PersonasActividades{personaActividadesTiposId},
+	PersonasActividadesPld to PersonasActividades{personaActividadesPldId},
+	PersonasActividadesScian to PersonasActividades{personaActividadesScianId},
+
+	PersonasDoctosTipos to PersonasDocumentos{documentosTipoId},
+	PersonasBajaRazones to PersonasBajaHistorico{personasBajaRazonesId},
+	PersonasBajaHistorico to Personas{personasId}
+}
+
+/** 
+ * Set pagination options.
+ */
+paginate *  with pagination
+
+dto * with mapstruct
+/**
+ * Set service options to all except few.
+ */
+service all with serviceClass
+/** 
+ * Set an angular suffix.
+ */
+angularSuffix * with safeosms
+
+//filter all

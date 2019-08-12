@@ -1,0 +1,190 @@
+//#title: safe-osms-database-creditos
+/**
+* Reglas generales.
+* Maximo en nombres de catalogos 80
+* Maximo en tipos desconocidos 80
+* Maximo en mails 80
+* Boleanos como enteros 0/1
+* Maximo en alias de catalogo 30
+*/
+entity CreditosProductos {
+    nombre  String maxlength(80),
+    alias  String maxlength(30),
+	clase Integer /** 1=x,2=Credito,4=captacion */,
+	tipo Integer /***/,
+
+
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+entity CreditosProductosReglas {
+	creditosProductosId Integer max (9999),
+	nombre String maxlength(80),
+	valor String maxlength(100) /**Valor*/,
+	contexto String maxlength(30) /**Contexto */,
+	eventos String maxlength(80) /**Eventos*/,
+	metadatos String maxlength(100) /**Metadata*/,
+	sujetos String maxlength(100) /**Sujetos*/,
+	valorSimple Integer max(9) /**Booleano*/,
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+/**
+* Costos y Cargos de los Productos
+*/
+entity CreditosProductosCostos {
+    nombre  String maxlength(80),
+	creditosProductosId Integer max (9999),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+entity CreditosProductosMontos {
+    nombre  String maxlength(80),
+	creditosProductosId Integer max (9999),
+	entidadSucursalRolesId Integer max (9999),
+	montoMinimo BigDecimal,
+	montoMaximo BigDecimal,
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+entity CreditosProductosGarantias {
+    nombre  String maxlength(80),
+	creditosProductosId Integer max (9999),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+/**
+* Tipos de Documentos Solicitados por el credito
+*/
+entity CreditosProductosDocumentacion {
+	nombre  String maxlength(80),
+    personasDocumentosId Integer max (9999),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+/**
+* Tipos de Garantia
+* Mobiliaria, inmobiliaria
+*/
+entity CreditosGarantiasTipos {
+	nombre  String maxlength(80),
+    alias  String maxlength(30),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+entity CreditosProductosContable {
+    productosContNom  String maxlength(80),
+
+	creditosProductosId Integer max (9999),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)	
+}
+entity CreditosSolicitudes {
+	solicitudesIdInterno String maxlength(20),
+    personasId Long max(999999999),
+	productosId Integer max (9999)
+	
+}
+
+entity CreditosAutorizados {
+	autorizadosIdInterno String maxlength(20),
+    personasId Long max(999999999),
+	productosId Integer max(9999),
+
+	tiposDeAutId Integer max(9999)
+}
+
+entity CreditosRechazados {
+	rechazadosIdInterno String maxlength(20),
+    personasId Long max(999999999),
+	creditosProductosId Integer max (9999),
+	tipoDeRechId Integer max (9999),
+	solicitudesId Long max(999999999)
+}
+
+entity CreditosCartera {
+	carteraIdInterno String maxlength(20),
+    solicitudesId Integer,
+    autorizadosId Integer,
+	creditosProductosId Integer max (9999),
+
+    personasId Long max(999999999)
+}
+
+entity CreditosReestructurados {
+	creditosCarteraId Long max(999999999),
+	creditosProductosId Integer max (9999),
+    personasId Long max(999999999)
+}
+
+entity CreditosRenovados {
+	creditosCarteraId Long max(999999999),
+	creditosProductosId Integer max (9999),
+    personasId Long max(999999999)
+}
+
+entity CreditosTiposDeAutorizacion {
+	nombre String maxlength(80),
+    alias String maxlength(30),
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+/**
+* Creditos Rechazados Tipos
+*/
+entity CreditosTiposDeRechazo {
+	nombre String maxlength(80),
+    alias String maxlength(30),
+
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+relationship OneToMany {
+	
+	CreditosSolicitudes to CreditosCartera{solicitudesId},
+	CreditosAutorizados to CreditosCartera{autorizadosId},
+	CreditosSolicitudes to CreditosRechazados{solicitudesId},
+
+    CreditosCartera to CreditosReestructurados{carteraId},
+	CreditosCartera to CreditosRenovados{carteraId},
+
+
+	CreditosProductos to CreditosAutorizados{productosId},
+	CreditosProductos to CreditosSolicitudes{productosId},
+	CreditosProductos to CreditosCartera{productosId},
+	CreditosProductos to CreditosRenovados{productosId},
+	CreditosProductos to CreditosReestructurados{productosId},
+
+	CreditosProductos to CreditosProductosContable{productosId},
+	CreditosProductos to CreditosProductosCostos{productosId},
+	CreditosProductos to CreditosProductosReglas{productosId},
+	CreditosTiposDeRechazo to CreditosRechazados{tipoDeRechId},
+	CreditosTiposDeAutorizacion to CreditosSolicitudes{tiposDeAutId}
+}
+
+
+
+/** 
+ * Set pagination options.
+ */
+paginate *  with pagination
+
+dto * with mapstruct
+/**
+ * Set service options to all except few.
+ */
+service all with serviceClass
+/** 
+ * Set an angular suffix.
+ */
+angularSuffix * with safeosms
+
+
+//filter all

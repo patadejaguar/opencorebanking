@@ -1,0 +1,137 @@
+//#title: safe-osms-database-sistema
+/**
+* Reglas generales.
+* Maximo en nombres de catalogos 80
+* Maximo en tipos desconocidos 80
+* Maximo en mails 80
+* Boleanos como enteros 0/1
+* Maximo en alias de catalogo 30
+*/
+
+entity SistemaRoles {
+	rolesId Integer,
+    tipoEnSistemaId Integer,
+    estatus Integer max(9)
+}
+/**
+* Tabla de Configuracion del Sistema
+*/
+entity SistemaConfiguracion {
+	nombre String maxlength(80),
+	tipo String maxlength(15), /** INT,CHAR,REAL */
+	valor String maxlength(100),
+    estatus Integer max(9)
+}
+/**
+* Tabla de Objetos de Datos del Sistema
+*/
+entity SistemaCatalogoInterno {
+	tabla  String maxlength(80),
+	campo  String maxlength(80),
+	valor  String maxlength(100),
+    estatus Integer max(9)
+}
+entity SistemaNivelRiesgo {
+	nombre String maxlength(80),
+	alias String maxlength(30),
+    estatus Integer max(9)
+}
+
+entity SistemaErrorTipos {
+
+	nombre String maxlength(80),
+	alias String maxlength(30),
+    estatus Integer max(9)
+}
+/**
+* canales de comunicacion
+* mail sms wsms=wathsapp sms
+*/
+entity SistemaComCanales {
+	nombre String maxlength(80),
+	comCanalesAlias String maxlength(30),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+entity SistemaLog {
+
+	/** hash : Usuario de Origen */
+	sistemaErrorTiposId Integer max(9999),
+	uuidOrigen String maxlength(30),
+
+	errorLogText Blob,
+
+	entidadId Integer,
+	personaId Long max(999999999),
+	contratoId Long max(999999999),
+	reciboId Long max(999999999),
+
+	ipLocal String maxlength(20),
+	ipProxy String maxlength(20),
+	ipPublic String maxlength(20),
+	gpsLocation String maxlength(25),
+    /** Usuario identificado de origen */
+    usuarioId Integer max(9999),
+    /** Tiempo de Registro */
+    tiempo Long max(999999999),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+entity SistemaLenguaje {
+	lenguajeId String maxlength(30),
+	lenguajeVal String maxlength(80),
+	lenguajeLang String maxlength(4),
+	estatus Integer max(9)
+}
+entity SistemaMsjLargo {
+	msjLargoNom String  maxlength(80),
+	msjLargoTexto String maxlength(150),
+	/** Estado Activo/Inactivo 1/0 */
+    estatus Integer max(9)
+}
+
+/**
+* Tipos de Productos en el Sistema :
+* 1 = Propios de la persona
+* 4 = Propios de Credito
+* 8 = Productos de Captacion
+*/
+entity SistemaProductosTipos {
+	lenguajeID String maxlength(30),
+	lenguajeVal String maxlength(80)
+}
+
+relationship ManyToOne {
+	SistemaLog{errorTiposId} to SistemaErrorTipos
+}
+
+/** 
+ * Set pagination options.
+ */
+paginate *  with pagination
+
+dto * with mapstruct
+/**
+ * Set service options to all except few.
+ */
+service all with serviceClass
+/** 
+ * Set an angular suffix.
+ */
+angularSuffix * with safeosms
+
+//filter *
+
+
+// Maping
+//dto all with mapstruct
+//service all with serviceImpl
+// Service with class
+//service all with serviceClass
+// Filtering
+// filter all
+
+// Paginate
+//paginate all with pagination
+//skipClient all

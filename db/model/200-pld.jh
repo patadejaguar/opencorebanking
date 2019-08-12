@@ -1,0 +1,31 @@
+
+entity PldNivelRiesgo {
+	nombre String maxlength(80),
+	alias String maxlength(30),
+	color String maxlength(10),
+	limiteInferior Float,
+	limiteSuperior Float,
+    estatus Integer max(9)
+}
+
+
+
+/** 
+ * Set pagination options.
+ */
+paginate *  with pagination
+
+dto * with mapstruct
+/**
+ * Set service options to all except few.
+ */
+service all with serviceClass
+/** 
+ * Set an angular suffix.
+ */
+angularSuffix * with safeosms
+
+
+//filter all
+
+
